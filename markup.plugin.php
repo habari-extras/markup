@@ -43,10 +43,9 @@ MARKITUP;
     }
   }
 	
-}
-
   public function action_update_check() {
     Update::add( 'markUp', 'F695D390-2687-11DD-B5E1-2D6F55D89593',  $this->info->version );
   }
+}
   
 ?>

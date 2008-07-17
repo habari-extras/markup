@@ -12,7 +12,7 @@ class MarkUp extends Plugin {
       'url' => 'http://habariproject.org/',
       'author' => 'Habari Community',
       'authorurl' => 'http://habariproject.org/',
-      'version' => '0.1',
+      'version' => '0.2',
       'description' => 'Adds easy tag insertion to Habari\'s editor',
       'copyright' => '2008'
     );
@@ -21,7 +21,7 @@ class MarkUp extends Plugin {
 
 	public function action_admin_header($theme)
 	{
-		if ( $theme->admin_page == 'publish' ) {
+		if ( $theme->page == 'publish' ) {
 			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/jquery.markitup.pack.js' );
 			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/sets/html/set.js' );
 			
@@ -31,7 +31,7 @@ class MarkUp extends Plugin {
 	}
 
 	public function action_admin_footer($theme) {
-		if ( $theme->admin_page == 'publish' ) {
+		if ( $theme->page == 'publish' ) {
 			echo <<<MARKITUP
 <script type="text/javascript">
 $(document).ready(function() {

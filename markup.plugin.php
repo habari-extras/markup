@@ -12,7 +12,7 @@ class MarkUp extends Plugin {
       'url' => 'http://habariproject.org/',
       'author' => 'Habari Community',
       'authorurl' => 'http://habariproject.org/',
-      'version' => '0.2',
+      'version' => '0.21',
       'description' => 'Adds easy tag insertion to Habari\'s editor',
       'copyright' => '2008'
     );
@@ -35,8 +35,18 @@ class MarkUp extends Plugin {
 			echo <<<MARKITUP
 <script type="text/javascript">
 $(document).ready(function() {
-mySettings.resizeHandle= false;
-$("#content").markItUp(mySettings);
+	mySettings.resizeHandle= false;
+	$("#content").markItUp(mySettings);
+	$('label[for=content].overcontent').attr('style', 'margin-top:30px;margin-left:5px;');
+	$('#content').focus(function(){
+		$('label[for=content]').removeAttr('style'); 
+	}).blur(function(){
+		if ($('#content').val() == '') {
+			$('label[for=content]').attr('style', 'margin-top:30px;margin-left:5px;'); 
+		} else {
+			$('label[for=content]').removeAttr('style');
+		}
+	});
 });
 </script>
 MARKITUP;

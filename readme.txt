@@ -1,6 +1,6 @@
 Plugin: markUp
 URL: http://habariproject.org
-Version: 0.2
+Version: 0.21
 Author: Habari Project
 
 Purpose 
@@ -31,6 +31,11 @@ markItUp makes no changes to your database, so no cleanup is required.
 
 Changelog
 
-Version 0.2 - Fix: Changes necessitated by admin api changes
+Version 0.21
+Fix: Move content label into the edit area of the content textarea.
 
-Version 0.1 - Initial release
+Version 0.2
+Fix: Changes necessitated by admin api changes
+
+Version 0.1
+Initial release

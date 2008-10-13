@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 // markItUp! Universal MarkUp Engine, JQuery plugin
-// v 1.1.0 beta
+// v 1.1.3 beta
 // Dual licensed under the MIT and GPL licenses.
 // ----------------------------------------------------------------------------
 // Copyright (C) 2007-2008 Jay Salvat
@@ -32,7 +32,7 @@
 		options = {	id:						'',
 					nameSpace:				'',
 					root:					'',
-					previewInWindow:		false, //"width=800, height=600, resizable=yes, scrollbars=yes",
+					previewInWindow:		'', // 'width=800, height=600, resizable=yes, scrollbars=yes'
 					previewAutoRefresh:		true,
 					previewPosition:		'after',
 					previewTemplatePath:	'~/templates/preview.html',
@@ -242,12 +242,11 @@
 				} else {
 					block = openWith + (string||selection) + closeWith;
 				}
-				return {block:		block, 
-
-						openWith:	openWith, 
-						replaceWith:replaceWith, 
-						placeHolder:placeHolder,
-						closeWith:	closeWith
+				return {	block:block, 
+							openWith:openWith, 
+							replaceWith:replaceWith, 
+							placeHolder:placeHolder,
+							closeWith:closeWith
 					};
 			}
 
@@ -257,8 +256,16 @@
 				hash = clicked = button;
 				get();
 
-				$.extend(hash, { line:"", root:options.root, textarea:textarea, selection:(selection||''), caretPosition:caretPosition });
-
+				$.extend(hash, {	line:"", 
+						 			root:options.root,
+									textarea:textarea, 
+									selection:(selection||''), 
+									caretPosition:caretPosition,
+									ctrlKey:ctrlKey, 
+									shiftKey:shiftKey, 
+									altKey:altKey
+								}
+							);
 				// callbacks before insertion
 				prepare(options.beforeInsert);
 				prepare(clicked.beforeInsert);
@@ -347,9 +354,9 @@
 				}
 				return 0;
 			}
-
+				
 			// add markup
-			function insert(block) {
+			function insert(block) {	
 				if (document.selection) {
 					var newSelection = document.selection.createRange();
 					newSelection.text = block;
@@ -361,11 +368,14 @@
 			// set a selection
 			function set(start, len) {
 				if (textarea.createTextRange){
+					// quick fix to make it work on Opera 9.5
+					if ($.browser.opera && $.browser.version >= 9.5 && len == 0) {
+						return false;
+					}
 					range = textarea.createTextRange();
 					range.collapse(true);
 					range.moveStart('character', start); 
 					range.moveEnd('character', len); 
-
 					range.select();
 				} else if (textarea.setSelectionRange ){
 					textarea.setSelectionRange(start, start + len);
@@ -410,10 +420,10 @@
 							iFrame.insertAfter(footer);
 						} else {
 							iFrame.insertBefore(header);
-						}
+						}	
 						previewWindow = iFrame[iFrame.length-1].contentWindow || frame[iFrame.length-1];
 					}
-				} else if (altKey === true) {
+				} else if (altKey == true) {
 					if (iFrame) {
 						iFrame.remove();
 					}
@@ -423,21 +433,27 @@
 				if (!options.previewAutoRefresh) {
 					refreshPreview(); 
 				}
+			}
+
+			// refresh Preview window
+			function refreshPreview() {
+				if (previewWindow.document) {			
+					try {
+						sp = previewWindow.document.documentElement.scrollTop
+					} catch(e) {
+						sp = 0;
+					}					
+					previewWindow.document.open();
+					previewWindow.document.write(renderPreview());
+					previewWindow.document.close();
+					previewWindow.document.documentElement.scrollTop = sp;
+				}
 				if (options.previewInWindow) {
 					previewWindow.focus();
 				}
 			}
 
-			// refresh Preview window
-			function refreshPreview() {
-				if (previewWindow) {
-					previewWindow.document.open();
-					previewWindow.document.write(renderPreview());
-					previewWindow.document.close();
-				}
-			}
-
-			function renderPreview() {
+			function renderPreview() {				
 				if (options.previewParserPath !== '') {
 					$.ajax( {
 						type: 'POST',
@@ -445,7 +461,7 @@
 						url: options.previewParserPath,
 						data: options.previewParserVar+'='+encodeURIComponent($$.val()),
 						success: function(data) {
-							html = localize(data, 1); 
+							phtml = localize(data, 1); 
 						}
 					} );
 				} else {
@@ -458,18 +474,16 @@
 							}
 						} );
 					}
-					html = template.replace(/<!-- content -->/g, $$.val());
+					phtml = template.replace(/<!-- content -->/g, $$.val());
 				}
-				return html;
+				return phtml;
 			}
-
+			
 			// set keys pressed
 			function keyPressed(e) { 
 				shiftKey = e.shiftKey;
 				altKey = e.altKey;
 				ctrlKey = (!(e.altKey && e.ctrlKey)) ? e.ctrlKey : false;
-
-				$.extend(hash, { ctrlKey:ctrlKey, shiftKey:shiftKey, altKey:altKey  });
 
 				if (e.type === 'keydown') {
 					if (ctrlKey === true) {

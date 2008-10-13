@@ -136,17 +136,22 @@
 /***************************************************************************************/
 .html .markItUpEditor {
 	background-image:url(images/bg-editor-html.png);
+	background-repeat: no-repeat;
 }
 .markdown .markItUpEditor {
 	background-image:url(images/bg-editor-markdown.png);
+	background-repeat: no-repeat;
 }
 .textile .markItUpEditor {
 	background-image:url(images/bg-editor-textile.png);
+	background-repeat: no-repeat;
 }
 .bbcode .markItUpEditor {
 	background-image:url(images/bg-editor-bbcode.png);
+	background-repeat: no-repeat;
 }
 .wiki .markItUpEditor,
 .dotclear .markItUpEditor {
 	background-image:url(images/bg-editor-wiki.png);
+	background-repeat: no-repeat;
 }

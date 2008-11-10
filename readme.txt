@@ -1,6 +1,6 @@
 Plugin: markUp
 URL: http://habariproject.org
-Version: 0.3
+Version: 0.3.1
 Author: Habari Project
 
 Purpose 
@@ -32,6 +32,8 @@ Cleanup
 markUp adds entries to the Options table of your database. These are all prefixed with the work 'Markup'. If you are uninstalling the plugin completely, these entries can be safely removed.
 
 Changelog
+Version 0.3.1
+Fix: Allow coexistence with other plugins that use John Gruber's markdown on the same Habari install.
 
 Version 0.3
 Change: Made the editor skin configurable.

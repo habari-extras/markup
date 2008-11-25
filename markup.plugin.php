@@ -14,7 +14,7 @@ class MarkUp extends Plugin {
 		'url' => 'http://habariproject.org/',
 		'author' => 'Habari Community',
 		'authorurl' => 'http://habariproject.org/',
-		'version' => '0.3.1',
+		'version' => '0.3.2',
 		'description' => 'Adds easy html or markdown tag insertion to Habari\'s editor',
 		'copyright' => '2008'
 		);
@@ -99,8 +99,8 @@ class MarkUp extends Plugin {
 
 			$skin = Options::get( 'Markup__skin' );
 
-			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/jquery.markitup.pack.js' );
-			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js' );
+			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/jquery.markitup.pack.js', 'markitup', 'jquery' );
+			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js', 'markitup_set', 'jquery' );
 
 			Stack::add( 'admin_stylesheet', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
 			Stack::add( 'admin_stylesheet', array( $this->get_url() . '/markitup/sets/' . $dir . '/style.css', 'screen' ) );

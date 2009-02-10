@@ -126,17 +126,41 @@ class MarkUp extends Plugin {
 		if ( $theme->page == 'publish' ) {
 			$skin = Options::get( 'Markup__skin' );
 			$set = ( ( 'markitup' == $skin ) ? Options::get( 'Markup__markup_type' ) : '' );
+			$path = $this->get_url();
 			$markup = <<<MARKITUP
 $(document).ready(function() {
 	mySettings.nameSpace = '$set';
 	mySettings.resizeHandle= false;
+	mySettings.markupSet[mySettings.markupSet.length] = {
+		name: 'Full Screen',
+		className: 'fullScreen',
+		key: "F",
+		call: function(){
+			if (\$('.markItUp').hasClass('fullScreen')) {
+				\$('.markItUp').removeClass('fullScreen');
+				\$('textarea#content').css(
+					'height',
+					markItUpTextareaOGHeight + "px"
+				);
+			}
+			else {
+				markItUpTextareaOGHeight = \$('textarea#content').innerHeight();
+				\$('.markItUp').addClass('fullScreen');
+				\$('.markItUp.fullScreen textarea#content').css(
+					'height',
+					(\$('.markItUp.fullScreen').innerHeight() - 90) + "px"
+				);
+			}
+		}
+	}
+
 	$("#content").markItUp(mySettings);
 	$('label[for=content].overcontent').attr('style', 'margin-top:30px;margin-left:5px;');
 	$('#content').focus(function(){
-		$('label[for=content]').removeAttr('style'); 
+		$('label[for=content]').removeAttr('style');
 	}).blur(function(){
 		if ($('#content').val() == '') {
-			$('label[for=content]').attr('style', 'margin-top:30px;margin-left:5px;'); 
+			$('label[for=content]').attr('style', 'margin-top:30px;margin-left:5px;');
 		} else {
 			$('label[for=content]').removeAttr('style');
 		}
@@ -144,6 +168,30 @@ $(document).ready(function() {
 });
 MARKITUP;
 			Stack::add( 'admin_footer_javascript', $markup, 'markup_footer', 'jquery' );
+
+			echo <<<STYLE
+<style type="text/css">
+	.markItUp.fullScreen {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		z-index: 9999;
+		margin: 0;
+		background: #f0f0f0;
+		}
+	.markItUp.fullScreen .markItUpContainer{
+		padding: 20px 40px 40px;
+		}
+	.markItUp li.fullScreen {
+		background: transparent url($path/fullscreen.png) no-repeat;
+		}
+	.markItUp.fullScreen li.fullScreen {
+		background: transparent url($path/normalscreen.png) no-repeat;
+		}
+</style>
+STYLE;
 		}
 	}
 
@@ -151,5 +199,5 @@ MARKITUP;
     Update::add( 'markUp', 'F695D390-2687-11DD-B5E1-2D6F55D89593',  $this->info->version );
   }
 }
-  
+
 ?>

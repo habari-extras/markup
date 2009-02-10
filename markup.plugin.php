@@ -131,7 +131,8 @@ class MarkUp extends Plugin {
 $(document).ready(function() {
 	mySettings.nameSpace = '$set';
 	mySettings.resizeHandle= false;
-	mySettings.markupSet[mySettings.markupSet.length] = {
+	mySettings.markupSet.push({separator:'---------------' });
+	mySettings.markupSet.push({
 		name: 'Full Screen',
 		className: 'fullScreen',
 		key: "F",
@@ -152,7 +153,7 @@ $(document).ready(function() {
 				);
 			}
 		}
-	}
+	});
 
 	$("#content").markItUp(mySettings);
 	$('label[for=content].overcontent').attr('style', 'margin-top:30px;margin-left:5px;');

@@ -1,7 +1,5 @@
 <?php
 
-include_once( 'markitup/parsers/markdown/markdown.php' );
-
 class MarkUp extends Plugin {
 
 	/**
@@ -14,8 +12,8 @@ class MarkUp extends Plugin {
 		'url' => 'http://habariproject.org/',
 		'author' => 'Habari Community',
 		'authorurl' => 'http://habariproject.org/',
-		'version' => '0.3.2',
-		'description' => 'Adds easy html or markdown tag insertion to Habari\'s editor',
+		'version' => '0.4',
+		'description' => 'Adds easy html, markdown, or textile tag insertion to Habari\'s editor',
 		'copyright' => '2008'
 		);
 	}
@@ -37,6 +35,21 @@ class MarkUp extends Plugin {
 		}
 	}
 
+	public function action_init()
+	{
+		spl_autoload_register( array( __CLASS__, '_autoload' ) );
+	}
+
+	public static function _autoload( $class )
+	{
+		if( strtolower( $class ) == 'textile' ) {
+			require( 'markitup/parsers/textile/classTextile.php' );
+		}
+		elseif( strtolower( $class ) == 'markdown_parser' ) {
+			require( 'markitup/parsers/markdown/markdown.php' );
+		}
+	}
+
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
@@ -50,6 +63,7 @@ class MarkUp extends Plugin {
 		$types = array(
 			'html' => 'html',
 			'markdown' => 'markdown',
+			'textile' => 'textile',
 		);
 
 		$skins = array(
@@ -92,6 +106,9 @@ class MarkUp extends Plugin {
 				case 'markdown':
 					$dir = 'markdown';
 					break;
+				case 'textile':
+					$dir = 'textile';
+					break;
 				case 'html':
 				default:
 					$dir = 'html';
@@ -110,11 +127,23 @@ class MarkUp extends Plugin {
 
 	public static function filter_post_content_out( $content, $post )
 	{
+		static $textile;
+		static $markdown;
 		$markup = Options::get( 'Markup__markup_type' );
 
 		switch( $markup ) {
 			case 'markdown':
-				return Markdown( $content );
+//				return Markdown( $content );
+				if( !isset( $markdown ) ) {
+					$markdown = new Markdown_Parser;
+				}
+				return $markdown->transform( $content );
+				break;
+			case 'textile':
+				if( !isset( $textile) ) {
+					$textile = new Textile();
+				}
+				return $textile->TextileThis( $content );
 				break;
 			case 'html':
 			default:

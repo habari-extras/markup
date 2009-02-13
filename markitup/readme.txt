@@ -1,6 +1,13 @@
-markItUp! 1.1.3
+markItUp! 1.1.5
 
 CHANGE LOG
+markItUp! 1.1.5 2009-05-01
+- Modified: http://drupal.org/project/wysiwyg compatibility
+- Modified: Alt/Ctrl/Alt+Tab are now disabled
+
+markItUp! 1.1.4 2008-12-03
+- Fixed: Extra quote deleted line 95
+
 markItUp! 1.1.3 2008-09-12
 - Fixed: IE7 preview problem
 

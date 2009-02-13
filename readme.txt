@@ -1,6 +1,6 @@
 Plugin: markUp
 URL: http://habariproject.org
-Version: 0.3.2
+Version: 0.4
 Author: Habari Project
 
 Purpose 
@@ -32,12 +32,19 @@ Cleanup
 markUp adds entries to the Options table of your database. These are all prefixed with the work 'Markup'. If you are uninstalling the plugin completely, these entries can be safely removed.
 
 Changelog
+Version 0.4
+Change: Updated to markItUp 1.1.5.
+Change: Added a parser for the textile markup language.
+
+Version 0.3.2
+Change: Added full screen mode to editor.
+
 Version 0.3.1
 Fix: Allow coexistence with other plugins that use John Gruber's markdown on the same Habari install.
 
 Version 0.3
 Change: Made the editor skin configurable.
-Change: Added the markdown markup language.
+Change: Added a parser for the markdown markup language.
 Version 0.21
 Fix: Move content label into the edit area of the content textarea.
 
@@ -51,6 +58,8 @@ Credits
 
 Little software is the product of one individual's efforts. markUp utilizes components developed by other developers. We are grateful for their efforts.
 
-1. markItUp! - a jQuery based markup editor by Jay Salvat (http://markitup.jaysalvat.com/) forms the heart of markUp.
+1. markItUp! - a jQuery based markup editor by Jay Salvat (http://markitup.jaysalvat.com/) forms the heart of markup.
 
 2. PHP Markdown - a markdown parser by Michel Fortin (http://www.michelf.com/) is used for markdown parsing.
+
+3. Textile -  a textile parser by Dean Allen <dean@textism.com>, Carlo Zottmann <carlo@g-blog.net>, and Alex Shiels (http://thresholdstate.com/) is used for textile parsing.

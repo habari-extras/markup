@@ -1,0 +1,11 @@
+<plugin>
+	<name>markUp</name>
+	<license>Apache License 2.0</license>
+	<url>http://habariproject.org/</url>
+	<author>Habari Community</author>
+	<authorurl>http://habariproject.org/</authorurl>
+	<version>0.4</version>
+	<description>Adds easy html, markdown, or textile tag insertion to Habari\'s editor</description>
+	<copyright>2008</copyright>
+</plugin>
+

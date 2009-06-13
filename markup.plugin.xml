@@ -2,7 +2,7 @@
 <pluggable type="plugin">
 	<name>markUp</name>
 	<author url="http://habariproject.org/">Habari Community</author>
-	<version>0.4</version>
+	<version>0.5</version>
 	<url>http://habariproject.org/</url>
 	<description><![CDATA[Adds easy html, markdown, or textile tag insertion to Habari's editor.]]></description>
 	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</license>

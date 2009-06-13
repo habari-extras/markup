@@ -108,8 +108,14 @@ class MarkUp extends Plugin {
 		}
 	}
 
+	public function alias()
+	{
+		return array(
+			'do_markup' => array( 'post_content_out', 'post_content_excerpt', 'post_content_summary' )
+		);
+	}
 
-	public static function filter_post_content_out( $content, $post )
+	public function do_markup( $content, $post )
 	{
 		static $textile;
 		static $markdown;
@@ -117,7 +123,6 @@ class MarkUp extends Plugin {
 
 		switch( $markup ) {
 			case 'markdown':
-//				return Markdown( $content );
 				if( !isset( $markdown ) ) {
 					$markdown = new Markdown_Parser;
 				}

@@ -3,22 +3,6 @@
 class MarkUp extends Plugin {
 
 	/**
-	* Required Plugin Information
-	**/
-	public function info() {
-		return array(
-		'name' => 'markUp',
-		'license' => 'Apache License 2.0',
-		'url' => 'http://habariproject.org/',
-		'author' => 'Habari Community',
-		'authorurl' => 'http://habariproject.org/',
-		'version' => '0.4',
-		'description' => 'Adds easy html, markdown, or textile tag insertion to Habari\'s editor',
-		'copyright' => '2008'
-		);
-	}
-
-	/**
 	 * Set options to defaults
 	 */
 	public function action_plugin_activation( $file )

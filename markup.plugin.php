@@ -21,6 +21,7 @@ class MarkUp extends Plugin {
 
 	public function action_init()
 	{
+		$this->load_text_domain( 'markup' );
 		spl_autoload_register( array( __CLASS__, '_autoload' ) );
 	}
 
@@ -37,7 +38,7 @@ class MarkUp extends Plugin {
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[] = _t( 'Configure' );
+			$actions[] = _t( 'Configure', 'markup' );
 		}
 		return $actions;
 	}
@@ -45,28 +46,28 @@ class MarkUp extends Plugin {
 	public function action_plugin_ui( $plugin_id, $action )
 	{
 		$types = array(
-			'html' => 'html',
-			'markdown' => 'markdown',
-			'textile' => 'textile',
+			'html' => _t( 'Html', 'markup' ),
+			'markdown' => _t( 'Markdown', 'markup' ),
+			'textile' => _t( 'Textile', 'markup' ) ,
 		);
 
 		$skins = array(
-			'simple' => 'Simple',
-			'markitup' => 'MarkItUp',
+			'simple' => _t( 'Simple', 'markup' ),
+			'markitup' => _t( 'MarkItUp', 'markup' ),
 		);
 
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
-				case _t( 'Configure' ):
+				case _t( 'Configure', 'markup' ):
 					$form = new FormUI( 'markup' );
 
-					$form->append( 'select', 'markup_type', 'Markup__markup_type', _t( 'Markup Type ' ) );
+					$form->append( 'select', 'markup_type', 'Markup__markup_type', _t( 'Markup Type ', 'markup' ) );
 					$form->markup_type->options = $types;
 
-					$form->append( 'select', 'skin', 'Markup__skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ' ) );
+					$form->append( 'select', 'skin', 'Markup__skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
 					$form->skin->options = $skins;
 
-					$form->append( 'submit', 'save', _t( 'Save' ) );
+					$form->append( 'submit', 'save', _t( 'Save', 'markup' ) );
 
 					$form->on_success( array( $this, 'config_success' ) );
 					$form->out();
@@ -78,7 +79,7 @@ class MarkUp extends Plugin {
 	public static function config_success( $ui )
 	{
 		$ui->save();
-		Session::notice( 'Markup settings updated.' );
+		Session::notice( _t( 'Markup settings updated.', 'markup' ) );
 	}
 
 	public function action_admin_header( $theme )
@@ -108,12 +109,12 @@ class MarkUp extends Plugin {
 		}
 	}
 
-  public function alias()
-  {
-    return array(
-      'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary' )
-    );
-  }
+	public function alias()
+	{
+		return array(
+			'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary' )
+		);
+	}
 
 	public function do_markup( $content, $post )
 	{

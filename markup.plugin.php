@@ -112,7 +112,7 @@ class MarkUp extends Plugin {
 	public function alias()
 	{
 		return array(
-			'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary' )
+      'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary', 'filter_post_content_atom', 'filter_post_title_atom' )
 		);
 	}
 

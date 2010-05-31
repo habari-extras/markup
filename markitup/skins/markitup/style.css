@@ -12,12 +12,12 @@
 	text-decoration:none;
 }
 .markItUp  {
-	width:100%;
+	width:700px;
 	margin:5px 0 5px 0;
-	border:5px solid #F5F5F5;
+	border:5px solid #F5F5F5;	
 }
 .markItUpContainer  {
-	border:1px solid #3C769D;
+	border:1px solid #3C769D;	
 	background:#FFF url(images/bg-container.png) repeat-x top left;
 	padding:5px 5px 2px 5px;
 	font:11px Verdana, Arial, Helvetica, sans-serif;
@@ -25,14 +25,14 @@
 .markItUpEditor {
 	font:12px 'Courier New', Courier, monospace;
 	padding:5px 5px 5px 35px;
-	width:670px;
+	border:3px solid #3C769D;
+	width:643px;
 	height:320px;
-	background:transparent;
+	background-image:url(images/bg-editor.png);
+	background-repeat:no-repeat;
 	clear:both; display:block;
 	line-height:18px;
 	overflow:auto;
-	border:1px solid #3C769D;
-	border-bottom: 0;
 }
 .markItUpPreviewFrame	{
 	overflow:auto;
@@ -55,10 +55,6 @@
 	cursor:n-resize;
 }
 /***************************************************************************************/
-.markItUpHeader {
-	border-right:1px solid #3C769D;
-	border-left:1px solid #3C769D;
-}
 /* first row of buttons */
 .markItUpHeader ul li	{
 	list-style:none;
@@ -136,22 +132,17 @@
 /***************************************************************************************/
 .html .markItUpEditor {
 	background-image:url(images/bg-editor-html.png);
-	background-repeat: no-repeat;
 }
 .markdown .markItUpEditor {
 	background-image:url(images/bg-editor-markdown.png);
-	background-repeat: no-repeat;
 }
 .textile .markItUpEditor {
 	background-image:url(images/bg-editor-textile.png);
-	background-repeat: no-repeat;
 }
 .bbcode .markItUpEditor {
 	background-image:url(images/bg-editor-bbcode.png);
-	background-repeat: no-repeat;
 }
 .wiki .markItUpEditor,
 .dotclear .markItUpEditor {
 	background-image:url(images/bg-editor-wiki.png);
-	background-repeat: no-repeat;
 }

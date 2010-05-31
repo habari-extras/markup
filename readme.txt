@@ -32,6 +32,10 @@ Cleanup
 markUp adds entries to the Options table of your database. These are all prefixed with the work 'Markup'. If you are uninstalling the plugin completely, these entries can be safely removed.
 
 Changelog
+Version 0.5
+Change: Updated to markItup 1.1.7
+Change: Added a parser for the bbcode markup language.
+
 Version 0.4
 Change: Updated to markItUp 1.1.5.
 Change: Added a parser for the textile markup language.
@@ -63,3 +67,5 @@ Little software is the product of one individual's efforts. markUp utilizes comp
 2. PHP Markdown - a markdown parser by Michel Fortin (http://www.michelf.com/) is used for markdown parsing.
 
 3. Textile -  a textile parser by Dean Allen <dean@textism.com>, Carlo Zottmann <carlo@g-blog.net>, and Alex Shiels (http://thresholdstate.com/) is used for textile parsing.
+
+4. BBCode - a BBCode parser by Jay Salvat (http://markitup.jaysalvat.com/) is used for BBCode parsing. The class wrapper around the parser is by the Habari Community.

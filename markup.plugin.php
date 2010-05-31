@@ -33,6 +33,9 @@ class MarkUp extends Plugin {
 		elseif( strtolower( $class ) == 'markdown_parser' ) {
 			require( 'markitup/parsers/markdown/markdown.php' );
 		}
+		elseif( strtolower( $class ) == 'bbcode' ) {
+		    require( 'markitup/parsers/bbcode/bbcode.php' );
+		}
 	}
 
 	public function filter_plugin_config( $actions, $plugin_id )
@@ -48,7 +51,8 @@ class MarkUp extends Plugin {
 		$types = array(
 			'html' => _t( 'Html', 'markup' ),
 			'markdown' => _t( 'Markdown', 'markup' ),
-			'textile' => _t( 'Textile', 'markup' ) ,
+			'textile' => _t( 'Textile', 'markup' ),
+			'bbcode' => _t( 'BBCode', 'markup' ),
 		);
 
 		$skins = array(
@@ -94,6 +98,9 @@ class MarkUp extends Plugin {
 				case 'textile':
 					$dir = 'textile';
 					break;
+				case 'bbcode':
+					$dir = 'bbcode';
+					break;
 				case 'html':
 				default:
 					$dir = 'html';
@@ -120,6 +127,7 @@ class MarkUp extends Plugin {
 	{
 		static $textile;
 		static $markdown;
+		static $bbcode;
 		$markup = Options::get( 'Markup__markup_type' );
 
 		switch( $markup ) {
@@ -134,6 +142,12 @@ class MarkUp extends Plugin {
 					$textile = new Textile();
 				}
 				return $textile->TextileThis( $content );
+				break;
+			case 'bbcode':
+				if( !isset( $bbcode ) ) {
+				    $bbcode = new BBCode();
+				}
+				return $bbcode->transform( $content );
 				break;
 			case 'html':
 			default:

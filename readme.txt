@@ -1,6 +1,6 @@
 Plugin: markUp
 URL: http://habariproject.org
-Version: 0.4
+Version: 0.5
 Author: Habari Project
 
 Purpose 

@@ -8,14 +8,20 @@ class MarkUp extends Plugin {
 	public function action_plugin_activation( $file )
 	{
 		if ( realpath( $file ) == __FILE__ ) {
-			$type = Options::get( 'Markup__markup_type' );
-			if ( empty( $type ) ) {
-				Options::set( 'Markup__markup_type', 'html' );
+			$opts = array( 
+						'Markup__markup_type' => 'html',
+						'Markup__skin' => 'simple',
+						'Markup__process_comments' => FALSE,
+						'Markup__show_comments' => FALSE,
+						'Markup__comment_markup_type' => 'html',
+						'Markup__comment_skin' => 'simple' );
+			foreach ( $opts as $opt => $value ) {
+				$cur = Options::get( $opt );
+				if ( empty( $cur ) ) {
+					Options::set( $opt, $value );
+				}
 			}
-			$skin = Options::get( 'Markup__skin' );
-			if( empty( $skin ) ) {
-				Options::set( 'Markup__skin', 'simple' );
-			}
+
 		}
 	}
 
@@ -65,11 +71,26 @@ class MarkUp extends Plugin {
 				case _t( 'Configure', 'markup' ):
 					$form = new FormUI( 'markup' );
 
-					$form->append( 'select', 'markup_type', 'Markup__markup_type', _t( 'Markup Type ', 'markup' ) );
-					$form->markup_type->options = $types;
+					$form->append( 'fieldset', 'editor', _t( 'Post Editor', 'markup' ) );
+					$form->editor->append( 'select', 'markup_type', 'Markup__markup_type', _t( 'Markup Type ', 'markup' ) );
+					$form->editor->markup_type->options = $types;
 
-					$form->append( 'select', 'skin', 'Markup__skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
-					$form->skin->options = $skins;
+					$form->editor->append( 'select', 'skin', 'Markup__skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
+					$form->editor->skin->options = $skins;
+
+					$form->append( 'fieldset', 'comment', _t( 'Comment Form', 'markup' ) );
+
+					$form->comment->append( 'label', 'process_label', _t( 'Process markup in comments?', 'markup' ) );
+					$form->comment->append( 'radio', 'process_comments', 'Markup__process_comments', _t( 'Process markup in comments?', 'markup' ), array( TRUE => _t( 'Yes' ), FALSE => _t( 'No' ) ) );
+
+					$form->comment->append( 'label', 'show_label', _t( 'Show markup toolbar on comment form?', 'markup' ) );
+					$form->comment->append( 'radio', 'show_comments', 'Markup__show_comments', _t( 'Show markup toolbar on comment form?', 'markup' ), array( TRUE => _t( 'Yes' ), FALSE => _t( 'No' ) ) );
+
+					$form->comment->append( 'select', 'comment_markup_type', 'Markup__comment_markup_type', _t( 'Markup Type ', 'markup' ) );
+					$form->comment->comment_markup_type->options = $types;
+
+					$form->comment->append( 'select', 'comment_skin', 'Markup__comment_skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
+					$form->comment->comment_skin->options = $skins;
 
 					$form->append( 'submit', 'save', _t( 'Save', 'markup' ) );
 
@@ -116,10 +137,37 @@ class MarkUp extends Plugin {
 		}
 	}
 
+	public function theme_header( $theme )
+	{
+		if ( Options::get( 'Markup__show_comments' ) ) {
+			$set = Options::get( 'Markup__comment_markup_type' );
+
+			switch( $set ) {
+				case 'markdown':
+					$dir = 'markdown';
+					break;
+				case 'textile':
+					$dir = 'textile';
+					break;
+				case 'bbcode':
+					$dir = 'bbcode';
+					break;
+				case 'html':
+				default:
+					$dir = 'html';
+			}
+
+			$skin = Options::get( 'Markup__comment_skin' );
+
+			Stack::add( 'template_stylesheet', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
+			Stack::add( 'template_stylesheet', array( $this->get_url() . '/markitup/sets/' . $dir . '/style.css', 'screen' ) );
+		}
+	}
+
 	public function alias()
 	{
 		return array(
-      'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary', 'filter_post_content_atom', 'filter_post_title_atom' )
+		  'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary', 'filter_post_content_atom', 'filter_post_title_atom', 'filter_comment_content_out', 'filter_comment_content_atom', 'filter_atom_add_comment' /* Remove this last one when Ticket #1245 is resolved */ )
 		);
 	}
 
@@ -128,8 +176,16 @@ class MarkUp extends Plugin {
 		static $textile;
 		static $markdown;
 		static $bbcode;
-		$markup = Options::get( 'Markup__markup_type' );
 
+		$process_comments = Options::get( 'Markup__process_comments' );
+		if ( $post instanceof Comment && $process_comments ) {
+			$markup = Options::get( 'Markup__comment_markup_type' );
+		}
+		else {
+			$markup = Options::get( 'Markup__markup_type' );
+		}
+		
+		// Posts are Post objects and comments are comment objects.
 		switch( $markup ) {
 			case 'markdown':
 				if( !isset( $markdown ) ) {
@@ -155,7 +211,8 @@ class MarkUp extends Plugin {
 		}
 	}
 
-	public function action_admin_footer($theme) {
+	public function action_admin_footer( $theme )
+	{
 		if ( $theme->page == 'publish' ) {
 			$skin = Options::get( 'Markup__skin' );
 			$set = ( ( 'markitup' == $skin ) ? Options::get( 'Markup__markup_type' ) : '' );
@@ -170,19 +227,19 @@ $(document).ready(function() {
 		className: 'fullScreen',
 		key: "F",
 		call: function(){
-			if (\$('.markItUp').hasClass('fullScreen')) {
-				\$('.markItUp').removeClass('fullScreen');
-				\$('textarea#content').css(
+			if ($('.markItUp').hasClass('fullScreen')) {
+				$('.markItUp').removeClass('fullScreen');
+				$('textarea#content').css(
 					'height',
 					markItUpTextareaOGHeight + "px"
 				);
 			}
 			else {
 				markItUpTextareaOGHeight = \$('textarea#content').innerHeight();
-				\$('.markItUp').addClass('fullScreen');
-				\$('.markItUp.fullScreen textarea#content').css(
+				$('.markItUp').addClass('fullScreen');
+				$('.markItUp.fullScreen textarea#content').css(
 					'height',
-					(\$('.markItUp.fullScreen').innerHeight() - 90) + "px"
+					($('.markItUp.fullScreen').innerHeight() - 90) + "px"
 				);
 			}
 		}
@@ -229,9 +286,51 @@ STYLE;
 		}
 	}
 
-  public function action_update_check() {
-    Update::add( 'markUp', 'F695D390-2687-11DD-B5E1-2D6F55D89593',  $this->info->version );
-  }
+	public function theme_footer( $theme )
+	{
+		if ( Options::get( 'Markup__show_comments' ) ) {
+			$set = Options::get( 'Markup__comment_markup_type' );
+
+			switch( $set ) {
+				case 'markdown':
+					$dir = 'markdown';
+					break;
+				case 'textile':
+					$dir = 'textile';
+					break;
+				case 'bbcode':
+					$dir = 'bbcode';
+					break;
+				case 'html':
+				default:
+					$dir = 'html';
+			}
+
+			// We put this in the footer as we don't want to slow the whole site down unnecessarily.
+			Stack::add( 'template_footer_javascript', Site::get_url( 'scripts' ) . '/jquery.js', 'jquery' );
+			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/jquery.markitup.pack.js', 'markitup', 'jquery' );
+			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js', 'markitup_set', 'jquery' );
+
+			$skin = Options::get( 'Markup__comment_skin' );
+			$path = $this->get_url();
+			// This is the same javascript as used in action_admin_footer, just modified to select the FormUI comment form textaread and optimised for improved performance
+			$markup = <<<MARKITUP
+$(document).ready(function(){mySettings.nameSpace='$set';mySettings.resizeHandle=false;mySettings.markupSet.push({separator:"---------------"});mySettings.markupSet.push({name:"Full Screen",className:"fullScreen",key:"F",call:function(){if($(".markItUp").hasClass("fullScreen")){\$(".markItUp").removeClass("fullScreen");$("textarea#comment_content").css("height",markItUpTextareaOGHeight+"px")}else{markItUpTextareaOGHeight=$("textarea#comment_content").innerHeight();$(".markItUp").addClass("fullScreen");$(".markItUp.fullScreen textarea#comment_content").css("height",($(".markItUp.fullScreen").innerHeight()-90)+"px")}}});$("#comment_content").markItUp(mySettings);$("label[for=comment_content].overcontent").attr("style","margin-top:30px;margin-left:5px;");$("#comment_content").focus(function(){\$("label[for=comment_content]").removeAttr("style")}).blur(function(){if($("#comment_content").val()==""){\$("label[for=comment_content]").attr("style","margin-top:30px;margin-left:5px;")}else{\$("label[for=comment_content]").removeAttr("style")}})});
+MARKITUP;
+			Stack::add( 'template_footer_javascript', $markup, 'markup_footer', 'jquery' );
+
+			echo <<<STYLE
+<style type="text/css">
+	.markItUp.fullScreen{position:absolute;top:0;left:0;height:100%;width:100%;z-index:9999;margin:0;background:#f0f0f0;}.markItUp.fullScreen .markItUpContainer{padding:20px 40px 40px;}.markItUp li.fullScreen{background:transparent url($path/fullscreen.png) no-repeat;}.markItUp.fullScreen li.fullScreen{background:transparent url($path/normalscreen.png) no-repeat;}
+</style>
+STYLE;
+		}
+	}
+
+	public function action_update_check() #
+	{
+		Update::add( 'markUp', 'F695D390-2687-11DD-B5E1-2D6F55D89593',  $this->info->version );
+	}
 }
 
 ?>

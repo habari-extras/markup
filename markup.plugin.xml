@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pluggable type="plugin">
 	<name>markUp</name>
-	<author url="http://habariproject.org/">Habari Community</author>
-	<version>0.5</version>
+	<author url="http://habariproject.org/">The Habari Community</author>
+	<version>0.6</version>
 	<url>http://habariproject.org/</url>
-	<description><![CDATA[Adds easy html, markdown, bbcode, or textile tag insertion to Habari's editor.]]></description>
+	<description><![CDATA[Adds easy HTML, Markdown, BBCode, or Textile tag insertion to Habari's editor and optionally your FormUI comment form.]]></description>
 	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</license>
-	<copyright>2009</copyright>
+	<copyright>2010</copyright>
+	<help>
+		<value><![CDATA[
+			<p>This plugin provides an easy UI based method of inserting and processing HTML, Markdown, BBCode and Textile tags in your Habari editor and optionally your FormUI based comment form.</p>
+		]]></value>
+	</help>
 </pluggable> 
  

@@ -313,17 +313,11 @@ STYLE;
 
 			$skin = Options::get( 'Markup__comment_skin' );
 			$path = $this->get_url();
-			// This is the same javascript as used in action_admin_footer, just modified to select the FormUI comment form textaread and optimised for improved performance
+			// This is the same javascript as used in action_admin_footer, just modified to select the FormUI comment form textarea, without the fullscreen button and optimised for improved performance
 			$markup = <<<MARKITUP
-$(document).ready(function(){mySettings.nameSpace='$set';mySettings.resizeHandle=false;mySettings.markupSet.push({separator:"---------------"});mySettings.markupSet.push({name:"Full Screen",className:"fullScreen",key:"F",call:function(){if($(".markItUp").hasClass("fullScreen")){\$(".markItUp").removeClass("fullScreen");$("textarea#comment_content").css("height",markItUpTextareaOGHeight+"px")}else{markItUpTextareaOGHeight=$("textarea#comment_content").innerHeight();$(".markItUp").addClass("fullScreen");$(".markItUp.fullScreen textarea#comment_content").css("height",($(".markItUp.fullScreen").innerHeight()-90)+"px")}}});$("#comment_content").markItUp(mySettings);$("label[for=comment_content].overcontent").attr("style","margin-top:30px;margin-left:5px;");$("#comment_content").focus(function(){\$("label[for=comment_content]").removeAttr("style")}).blur(function(){if($("#comment_content").val()==""){\$("label[for=comment_content]").attr("style","margin-top:30px;margin-left:5px;")}else{\$("label[for=comment_content]").removeAttr("style")}})});
+$(document).ready(function(){mySettings.nameSpace='$set';mySettings.resizeHandle=false;$("#comment_content").markItUp(mySettings);$("label[for=comment_content].overcontent").attr("style","margin-top:30px;margin-left:5px;");$("#comment_content").focus(function(){\$("label[for=comment_content]").removeAttr("style")}).blur(function(){if($("#comment_content").val()==""){\$("label[for=comment_content]").attr("style","margin-top:30px;margin-left:5px;")}else{\$("label[for=comment_content]").removeAttr("style")}})});
 MARKITUP;
 			Stack::add( 'template_footer_javascript', $markup, 'markup_footer', 'jquery' );
-
-			echo <<<STYLE
-<style type="text/css">
-	.markItUp.fullScreen{position:absolute;top:0;left:0;height:100%;width:100%;z-index:9999;margin:0;background:#f0f0f0;}.markItUp.fullScreen .markItUpContainer{padding:20px 40px 40px;}.markItUp li.fullScreen{background:transparent url($path/fullscreen.png) no-repeat;}.markItUp.fullScreen li.fullScreen{background:transparent url($path/normalscreen.png) no-repeat;}
-</style>
-STYLE;
 		}
 	}
 

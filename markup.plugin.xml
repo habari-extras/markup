@@ -3,6 +3,7 @@
 	<name>markUp</name>
 	<author url="http://habariproject.org/">The Habari Community</author>
 	<version>0.6</version>
+	<guid>F695D390-2687-11DD-B5E1-2D6F55D89593</guid>
 	<url>http://habariproject.org/</url>
 	<description><![CDATA[Adds easy HTML, Markdown, BBCode, or Textile tag insertion to Habari's editor and optionally your FormUI comment form.]]></description>
 	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</license>

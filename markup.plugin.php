@@ -44,15 +44,7 @@ class MarkUp extends Plugin {
 		}
 	}
 
-	public function filter_plugin_config( $actions, $plugin_id )
-	{
-		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[] = _t( 'Configure', 'markup' );
-		}
-		return $actions;
-	}
-
-	public function action_plugin_ui( $plugin_id, $action )
+	public function configure()
 	{
 		$types = array(
 			'html' => _t( 'Html', 'markup' ),
@@ -66,39 +58,33 @@ class MarkUp extends Plugin {
 			'markitup' => _t( 'MarkItUp', 'markup' ),
 		);
 
-		if ( $plugin_id == $this->plugin_id() ) {
-			switch ( $action ) {
-				case _t( 'Configure', 'markup' ):
-					$form = new FormUI( 'markup' );
+		$form = new FormUI( 'markup' );
 
-					$form->append( 'fieldset', 'editor', _t( 'Post Editor', 'markup' ) );
-					$form->editor->append( 'select', 'markup_type', 'Markup__markup_type', _t( 'Markup Type ', 'markup' ) );
-					$form->editor->markup_type->options = $types;
+		$form->append( 'fieldset', 'editor', _t( 'Post Editor', 'markup' ) );
+		$form->editor->append( 'select', 'markup_type', 'Markup__markup_type', _t( 'Markup Type ', 'markup' ) );
+		$form->editor->markup_type->options = $types;
 
-					$form->editor->append( 'select', 'skin', 'Markup__skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
-					$form->editor->skin->options = $skins;
+		$form->editor->append( 'select', 'skin', 'Markup__skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
+		$form->editor->skin->options = $skins;
 
-					$form->append( 'fieldset', 'comment', _t( 'Comment Form', 'markup' ) );
+		$form->append( 'fieldset', 'comment', _t( 'Comment Form', 'markup' ) );
 
-					$form->comment->append( 'label', 'process_label', _t( 'Process markup in comments?', 'markup' ) );
-					$form->comment->append( 'radio', 'process_comments', 'Markup__process_comments', _t( 'Process markup in comments?', 'markup' ), array( TRUE => _t( 'Yes' ), FALSE => _t( 'No' ) ) );
+		$form->comment->append( 'label', 'process_label', _t( 'Process markup in comments?', 'markup' ) );
+		$form->comment->append( 'radio', 'process_comments', 'Markup__process_comments', _t( 'Process markup in comments?', 'markup' ), array( TRUE => _t( 'Yes' ), FALSE => _t( 'No' ) ) );
 
-					$form->comment->append( 'label', 'show_label', _t( 'Show markup toolbar on comment form?', 'markup' ) );
-					$form->comment->append( 'radio', 'show_comments', 'Markup__show_comments', _t( 'Show markup toolbar on comment form?', 'markup' ), array( TRUE => _t( 'Yes' ), FALSE => _t( 'No' ) ) );
+		$form->comment->append( 'label', 'show_label', _t( 'Show markup toolbar on comment form?', 'markup' ) );
+		$form->comment->append( 'radio', 'show_comments', 'Markup__show_comments', _t( 'Show markup toolbar on comment form?', 'markup' ), array( TRUE => _t( 'Yes' ), FALSE => _t( 'No' ) ) );
 
-					$form->comment->append( 'select', 'comment_markup_type', 'Markup__comment_markup_type', _t( 'Markup Type ', 'markup' ) );
-					$form->comment->comment_markup_type->options = $types;
+		$form->comment->append( 'select', 'comment_markup_type', 'Markup__comment_markup_type', _t( 'Markup Type ', 'markup' ) );
+		$form->comment->comment_markup_type->options = $types;
 
-					$form->comment->append( 'select', 'comment_skin', 'Markup__comment_skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
-					$form->comment->comment_skin->options = $skins;
+		$form->comment->append( 'select', 'comment_skin', 'Markup__comment_skin', _t( 'Editor Skin&nbsp;&nbsp;&nbsp; ', 'markup' ) );
+		$form->comment->comment_skin->options = $skins;
 
-					$form->append( 'submit', 'save', _t( 'Save', 'markup' ) );
+		$form->append( 'submit', 'save', _t( 'Save', 'markup' ) );
 
-					$form->on_success( array( $this, 'config_success' ) );
-					$form->out();
-				break;
-			}
-		}
+		$form->on_success( array( $this, 'config_success' ) );
+		$form->out();
 	}
 
 	public static function config_success( $ui )

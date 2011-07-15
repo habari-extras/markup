@@ -153,25 +153,27 @@ class MarkUp extends Plugin {
 	public function alias()
 	{
 		return array(
-		  'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary', 'filter_post_content_atom', 'filter_post_title_atom', 'filter_comment_content_out', 'filter_comment_content_atom', 'filter_atom_add_comment' /* Remove this last one when Ticket #1245 is resolved */ )
+		  'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary', 'filter_post_content_atom', 'filter_post_title_atom', 'filter_comment_content_out', 'filter_comment_content_atom', 'filter_atom_add_comment' /* Remove this last one when Ticket #1245 is resolved (issue #115 on github ) */ )
 		);
 	}
 
-	public function do_markup( $content, $post )
+	public function do_markup( $content, $post = null )
 	{
 		static $textile;
 		static $markdown;
 		static $bbcode;
+		$markup = 'html';
 
 		$process_comments = Options::get( 'Markup__process_comments' );
+
+		// Posts are Post objects and comments are comment objects.
 		if ( $post instanceof Comment && $process_comments ) {
 			$markup = Options::get( 'Markup__comment_markup_type' );
 		}
-		else {
+		else if ( $post instanceof Post ) {
 			$markup = Options::get( 'Markup__markup_type' );
 		}
 		
-		// Posts are Post objects and comments are comment objects.
 		switch( $markup ) {
 			case 'markdown':
 				if( !isset( $markdown ) ) {

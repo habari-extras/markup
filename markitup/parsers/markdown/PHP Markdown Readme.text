@@ -4,7 +4,7 @@ PHP Markdown
 Version 1.0.1m - Sat 21 Jun 2008
 
 by Michel Fortin
-<http://www.michelf.com/>
+<http://michelf.com/>
 
 based on work by John Gruber  
 <http://daringfireball.net/>
@@ -110,7 +110,7 @@ can solve this problem by installing the "smartypants.php" file from
 Compatibility Mode function will use SmartyPants automatically without 
 further modification.
 
- [psp]: http://www.michelf.com/projects/php-smartypants/
+ [psp]: http://michelf.com/projects/php-smartypants/
 
 
 ### Updating Markdown in Other Programs ###
@@ -199,6 +199,54 @@ expected; (3) the output PHP Markdown actually produced.
 
 Version History
 ---------------
+
+1.0.1n (10 Oct 2009):
+
+*	Enabled reference-style shortcut links. Now you can write reference-style 
+	links with less brakets:
+	
+		This is [my website].
+		
+		[my website]: http://example.com/
+	
+	This was added in the 1.0.2 betas, but commented out in the 1.0.1 branch, 
+	waiting for the feature to be officialized. [But half of the other Markdown
+	implementations are supporting this syntax][half], so it makes sense for 
+	compatibility's sake to allow it in PHP Markdown too.
+
+ [half]: http://babelmark.bobtfish.net/?markdown=This+is+%5Bmy+website%5D.%0D%0A%09%09%0D%0A%5Bmy+website%5D%3A+http%3A%2F%2Fexample.com%2F%0D%0A&src=1&dest=2
+
+*	Now accepting many valid email addresses in autolinks that were 
+	previously rejected, such as:
+	
+		<abc+mailbox/department=shipping@example.com>
+		<!#$%&'*+-/=?^_`.{|}~@example.com>
+		<"abc@def"@example.com>
+		<"Fred Bloggs"@example.com>
+		<jsmith@[192.0.2.1]>
+
+*	Now accepting spaces in URLs for inline and reference-style links. Such 
+	URLs need to be surrounded by angle brakets. For instance:
+	
+		[link text](<http://url/with space> "optional title")
+
+		[link text][ref]
+		[ref]: <http://url/with space> "optional title"
+	
+	There is still a quirk which may prevent this from working correctly with 
+	relative URLs in inline-style links however.
+
+*	Fix for adjacent list of different kind where the second list could
+	end as a sublist of the first when not separated by an empty line.
+
+*	Fixed a bug where inline-style links wouldn't be recognized when the link 
+	definition contains a line break between the url and the title.
+
+*	Fixed a bug where tags where the name contains an underscore aren't parsed 
+	correctly.
+
+*	Fixed some corner-cases mixing underscore-ephasis and asterisk-emphasis.
+
 
 1.0.1m (21 Jun 2008):
 
@@ -521,7 +569,7 @@ Version History
 *	Major rewrite of the WordPress integration code that should 
 	correct many problems by preventing default WordPress filters from 
 	tampering with Markdown-formatted text. More details here:
-	<http://www.michelf.com/weblog/2005/wordpress-text-flow-vs-markdown/>
+	<http://michelf.com/weblog/2005/wordpress-text-flow-vs-markdown/>
 
 
 1.0.1a (15 Apr 2005)
@@ -685,8 +733,8 @@ Copyright and License
 ---------------------
 
 PHP Markdown
-Copyright (c) 2004-2007 Michel Fortin  
-<http://www.michelf.com/>  
+Copyright (c) 2004-2009 Michel Fortin  
+<http://michelf.com/>  
 All rights reserved.
 
 Based on Markdown  

@@ -115,7 +115,7 @@ class MarkUp extends Plugin {
 
 			$skin = Options::get( 'Markup__skin' );
 
-			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/jquery.markitup.pack.js', 'markitup', 'jquery' );
+			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/jquery.markitup.js', 'markitup', 'jquery' );
 			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js', 'markitup_set', 'jquery' );
 
 			Stack::add( 'admin_stylesheet', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
@@ -296,7 +296,7 @@ STYLE;
 
 			// We put this in the footer as we don't want to slow the whole site down unnecessarily.
 			Stack::add( 'template_footer_javascript', Site::get_url( 'scripts' ) . '/jquery.js', 'jquery' );
-			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/jquery.markitup.pack.js', 'markitup', 'jquery' );
+			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/jquery.markitup.js', 'markitup', 'jquery' );
 			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js', 'markitup_set', 'jquery' );
 
 			$skin = Options::get( 'Markup__comment_skin' );

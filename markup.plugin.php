@@ -153,7 +153,7 @@ class MarkUp extends Plugin {
 	public function alias()
 	{
 		return array(
-		  'do_markup' => array( 'filter_post_content_out', 'filter_post_content_excerpt', 'filter_post_content_summary', 'filter_post_content_atom', 'filter_post_title_atom', 'filter_comment_content_out', 'filter_comment_content_atom', 'filter_atom_add_comment' /* Remove this last one when Ticket #1245 is resolved (issue #115 on github ) */ )
+		  'do_markup' => array( 'filter_post_content_out_7', 'filter_post_content_excerpt_7', 'filter_post_content_summary_7', 'filter_post_content_atom_7', 'filter_post_title_atom_7', 'filter_comment_content_out_7', 'filter_comment_content_atom_7', 'filter_atom_add_comment_7' /* Remove this last one when Ticket #1245 is resolved (issue #115 on github ) */ )
 		);
 	}
 

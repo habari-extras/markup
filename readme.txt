@@ -1,15 +1,15 @@
 Plugin: markUp
 URL: http://habariproject.org
-Version: 0.6
+Version: 0.7.3
 Author: Habari Project
 
-Purpose 
+Purpose
 
 markUp provides a simple text editor for those of us who want the productivity improvements of not having to type in all our own markup tags, but don't want to use a wysiwyg editor. markUp gives you the choice of using html, textile, bbcode or markdown as your markup language.
 
 Out of the box markUp provides easy insertion of all header tags, paragraphs, unordered and ordered lists, bold, emphasis, images, and links.
 
-Requirements 
+Requirements
 
 Just activate it.
 
@@ -24,7 +24,7 @@ Uninstallation
 
 1. Got to the plugins page of your Habari admin panel.
 2. Click on the Deactivate button.
-3. Delete the markItUp directory from your user/plugins directory.
+3. Delete the markup directory from your user/plugins directory.
 4. Delete the plugins configuration entries from the Options table.
 
 Cleanup
@@ -32,10 +32,13 @@ Cleanup
 markUp adds entries to the Options table of your database. These are all prefixed with the work 'Markup'. If you are uninstalling the plugin completely, these entries can be safely removed.
 
 Changelog
+Version 0.7.3
+Fix: Internal changes to be compatible with Habari 0.9
+Change: Updated to markItUp 1.1.11
+
 Version 0.6
 Change: Added option to allow commenters to use markup supported tags within comments
 Change: Added option to include markup toolbar above comment form.
-Change: Added 
 
 Version 0.5
 Change: Updated to markItup 1.1.7

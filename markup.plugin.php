@@ -8,7 +8,7 @@ class MarkUp extends Plugin {
 	public function action_plugin_activation( $file )
 	{
 		if ( realpath( $file ) == __FILE__ ) {
-			$opts = array( 
+			$opts = array(
 						'Markup__markup_type' => 'html',
 						'Markup__skin' => 'simple',
 						'Markup__process_comments' => FALSE,
@@ -96,57 +96,19 @@ class MarkUp extends Plugin {
 	public function action_admin_header( $theme )
 	{
 		if ( $theme->page == 'publish' ) {
-			$set = Options::get( 'Markup__markup_type' );
+//			Stack::add( 'admin_header_javascript', 'markitup' );
+			Stack::add( 'admin_header_javascript', 'markitup_set' );
 
-			switch( $set ) {
-				case 'markdown':
-					$dir = 'markdown';
-					break;
-				case 'textile':
-					$dir = 'textile';
-					break;
-				case 'bbcode':
-					$dir = 'bbcode';
-					break;
-				case 'html':
-				default:
-					$dir = 'html';
-			}
-
-			$skin = Options::get( 'Markup__skin' );
-
-			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/jquery.markitup.js', 'markitup', 'jquery' );
-			Stack::add( 'admin_header_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js', 'markitup_set', 'jquery' );
-
-			Stack::add( 'admin_stylesheet', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
-			Stack::add( 'admin_stylesheet', array( $this->get_url() . '/markitup/sets/' . $dir . '/style.css', 'screen' ) );
+			Stack::add( 'admin_stylesheet', 'markitup_skin_css' );
+			Stack::add( 'admin_stylesheet', 'markitup_set_css' );
 		}
 	}
 
 	public function theme_header( $theme )
 	{
 		if ( Options::get( 'Markup__show_comments' ) ) {
-			$set = Options::get( 'Markup__comment_markup_type' );
-
-			switch( $set ) {
-				case 'markdown':
-					$dir = 'markdown';
-					break;
-				case 'textile':
-					$dir = 'textile';
-					break;
-				case 'bbcode':
-					$dir = 'bbcode';
-					break;
-				case 'html':
-				default:
-					$dir = 'html';
-			}
-
-			$skin = Options::get( 'Markup__comment_skin' );
-
-			Stack::add( 'template_stylesheet', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
-			Stack::add( 'template_stylesheet', array( $this->get_url() . '/markitup/sets/' . $dir . '/style.css', 'screen' ) );
+			Stack::add( 'template_stylesheet', 'markitup_comment_skin_css' );
+			Stack::add( 'template_stylesheet', 'markitup_comment_set_css' );
 		}
 	}
 
@@ -173,7 +135,7 @@ class MarkUp extends Plugin {
 		else if ( $post instanceof Post ) {
 			$markup = Options::get( 'Markup__markup_type' );
 		}
-		
+
 		switch( $markup ) {
 			case 'markdown':
 				if( !isset( $markdown ) ) {
@@ -205,7 +167,9 @@ class MarkUp extends Plugin {
 			$skin = Options::get( 'Markup__skin' );
 			$set = ( ( 'markitup' == $skin ) ? Options::get( 'Markup__markup_type' ) : '' );
 			$path = $this->get_url();
-			$markup = <<<MARKITUP
+
+			echo <<<MARKITUP
+<script>
 $(document).ready(function() {
 	mySettings.nameSpace = '$set';
 	mySettings.resizeHandle= false;
@@ -245,8 +209,8 @@ $(document).ready(function() {
 		}
 	});
 });
+</script>
 MARKITUP;
-			Stack::add( 'admin_footer_javascript', $markup, 'markup_footer', 'jquery' );
 
 			echo <<<STYLE
 <style type="text/css">
@@ -279,34 +243,67 @@ STYLE;
 		if ( Options::get( 'Markup__show_comments' ) ) {
 			$set = Options::get( 'Markup__comment_markup_type' );
 
-			switch( $set ) {
-				case 'markdown':
-					$dir = 'markdown';
-					break;
-				case 'textile':
-					$dir = 'textile';
-					break;
-				case 'bbcode':
-					$dir = 'bbcode';
-					break;
-				case 'html':
-				default:
-					$dir = 'html';
-			}
-
-			// We put this in the footer as we don't want to slow the whole site down unnecessarily.
-			Stack::add( 'template_footer_javascript', Site::get_url( 'scripts' ) . '/jquery.js', 'jquery' );
-			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/jquery.markitup.js', 'markitup', 'jquery' );
-			Stack::add( 'template_footer_javascript', $this->get_url() . '/markitup/sets/' . $dir . '/set.js', 'markitup_set', 'jquery' );
-
-			$skin = Options::get( 'Markup__comment_skin' );
-			$path = $this->get_url();
-			// This is the same javascript as used in action_admin_footer, just modified to select the FormUI comment form textarea, without the fullscreen button and optimised for improved performance
+			// This is the same javascript as used in action_admin_footer,
+			// just modified to select the FormUI comment form textarea,
+			// without the fullscreen button and optimised for improved performance.
+			// Dependencies are automatically loaded.
 			$markup = <<<MARKITUP
 $(document).ready(function(){mySettings.nameSpace='$set';mySettings.resizeHandle=false;$("#comment_content").markItUp(mySettings);$("label[for=comment_content].overcontent").attr("style","margin-top:30px;margin-left:5px;");$("#comment_content").focus(function(){\$("label[for=comment_content]").removeAttr("style")}).blur(function(){if($("#comment_content").val()==""){\$("label[for=comment_content]").attr("style","margin-top:30px;margin-left:5px;")}else{\$("label[for=comment_content]").removeAttr("style")}})});
 MARKITUP;
-			Stack::add( 'template_footer_javascript', $markup, 'markup_footer', 'jquery' );
+
+			Stack::add( 'template_footer_javascript', $markup, 'markup_footer', 'markitup_set' );
 		}
+	}
+
+	public function action_register_stackitems()
+	{
+		//Register the admin js and css
+		$set = Options::get( 'Markup__markup_type' );
+		$skin = Options::get( 'Markup__skin' );
+		$skin = Options::get( 'Markup__skin' );
+
+		switch( $set ) {
+			case 'markdown':
+				$dir = 'markdown';
+				break;
+			case 'textile':
+				$dir = 'textile';
+				break;
+			case 'bbcode':
+				$dir = 'bbcode';
+				break;
+			case 'html':
+			default:
+				$dir = 'html';
+		}
+
+
+		StackItem::register( 'markitup', $this->get_url() . '/markitup/jquery.markitup.js' )->add_dependency( 'jquery' );
+		StackItem::register( 'markitup_set', $this->get_url() . '/markitup/sets/' . $dir . '/set.js' )->add_dependency( 'markitup' );
+
+		StackItem::register( 'markitup_skin_css', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
+		StackItem::register( 'markitup_set_css', array( $this->get_url() . '/markitup/sets/' . $dir . '/style.css', 'screen' ) );
+
+		// Register the comment form js and css
+		$set = Options::get( 'Markup__comment_markup_type' );
+		$skin = Options::get( 'Markup__comment_skin' );
+
+		switch( $set ) {
+			case 'markdown':
+				$dir = 'markdown';
+				break;
+			case 'textile':
+				$dir = 'textile';
+				break;
+			case 'bbcode':
+				$dir = 'bbcode';
+				break;
+			case 'html':
+			default:
+				$dir = 'html';
+		}
+		StackItem::register( 'markitup_comment_skin_css', array( $this->get_url() . '/markitup/skins/' . $skin . '/style.css', 'screen' ) );
+		StackItem::register( 'markitup_comment_set_css', array( $this->get_url() . '/markitup/sets/' . $dir . '/style.css', 'screen' ) );
 	}
 }
 

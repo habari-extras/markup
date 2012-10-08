@@ -32,6 +32,10 @@ Cleanup
 markUp adds entries to the Options table of your database. These are all prefixed with the work 'Markup'. If you are uninstalling the plugin completely, these entries can be safely removed.
 
 Changelog
+Version 0.7.4
+Change: Updated markItUp javascript and sets to markItUp 1.1.13
+Change: Updated markdown parser to 1.0.1o
+
 Version 0.7.3
 Fix: Internal changes to be compatible with Habari 0.9
 Change: Updated to markItUp 1.1.11

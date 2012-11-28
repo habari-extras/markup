@@ -36,7 +36,7 @@ class MarkUp extends Plugin {
 		if( strtolower( $class ) == 'textile' ) {
 			require( 'markitup/parsers/textile/classTextile.php' );
 		}
-		elseif( strtolower( $class ) == 'markdown_parser' ) {
+		elseif( strtolower( $class ) == 'markdownextra_parser' ) {
 			require( 'markitup/parsers/markdown/markdown.php' );
 		}
 		elseif( strtolower( $class ) == 'bbcode' ) {
@@ -139,7 +139,7 @@ class MarkUp extends Plugin {
 		switch( $markup ) {
 			case 'markdown':
 				if( !isset( $markdown ) ) {
-					$markdown = new Markdown_Parser;
+					$markdown = new MarkdownExtra_Parser();
 				}
 				return $markdown->transform( $content );
 				break;

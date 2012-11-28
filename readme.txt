@@ -32,6 +32,9 @@ Cleanup
 markUp adds entries to the Options table of your database. These are all prefixed with the work 'Markup'. If you are uninstalling the plugin completely, these entries can be safely removed.
 
 Changelog
+Version 0.8
+Change: Updated markdown parser to MarkdownExtra 1.2.5. Allows use of footnotes and other 'non-standard' markdown syntax.
+
 Version 0.7.4
 Change: Updated markItUp javascript and sets to markItUp 1.1.13
 Change: Updated markdown parser to 1.0.1o
